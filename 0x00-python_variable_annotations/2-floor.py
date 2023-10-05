@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-2 - Basic annotations - floor
+Basic annotations - floor
 """
 
 import math
