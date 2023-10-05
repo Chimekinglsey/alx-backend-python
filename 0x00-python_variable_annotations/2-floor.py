@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Basic annotations - floor
+Basic annotations - floor(return the floor value of n)
 """
 
 import math
