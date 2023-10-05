@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """
-0-Basic annotations - concat
+Basic annotations - math.floor()
 """
-
-
 import math
 
 
-def floor(n: float) -> float:
+def floor(n: float) -> int:
     """returns the floor of n"""
     return math.floor(n)
