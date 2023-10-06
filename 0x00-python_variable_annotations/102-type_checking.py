@@ -5,9 +5,9 @@
 from typing import Tuple, List, Any
 
 
-def zoom_array(lst: Tuple, factor: int = 2) -> List[Any]:
+def zoom_array(lst: Tuple, factor: int = 2) -> List:
     """zooms an array based on the provided zoom factor"""
-    zoomed_in: List[Any] = [
+    zoomed_in: List = [
         item for item in lst
         for _ in range(int(factor))
     ]
