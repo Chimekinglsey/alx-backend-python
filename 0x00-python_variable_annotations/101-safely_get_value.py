@@ -9,7 +9,7 @@ R = Union[Any, T]
 Df = Union[T, None]
 
 
-def safely_get_value(dct: Mapping, key: Any, default=Df) -> R:
+def safely_get_value(dct: Mapping, key: Any, default: Df = None) -> R:
     """More annotation """
     if key in dct:
         return dct[key]
