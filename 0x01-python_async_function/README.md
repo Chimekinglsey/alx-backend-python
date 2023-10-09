@@ -1,0 +1,4 @@
+Python asyncio module is a standalone module that enables the running of concurrent processes in a program. It  is not synonymous to parallism or multi-threading where processes are split to CPU cores. asyncio uses async/await syntax to utilitize CPU idle time.
+`await` can only be used with an async coroutine. A coroutine is any definition that begins with `async`. The keyword `await` is literally intepreted as `pause me and continue with the next until i'm ready`
+
+In this project, we will explore asyncio module and how it beats the regular synchronous programming with speed and processing benefits in https request and file input output operations
