@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 """
-0. Async Generator
+0: async generator
 """
 import random
 import asyncio
-from typing import Iterator
 
 
-async def async_generator():
-    """loops  10 times yielding a random num after 1 sec"""
+async def async_generator() -> float:
+    """loops 10 times returning a random float per second"""
     for _ in range(10):
-        value = random.uniform(0, 10)
-        yield value
+        yield random.uniform(0, 10)
         await asyncio.sleep(1)
