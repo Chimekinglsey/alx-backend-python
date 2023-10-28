@@ -5,6 +5,13 @@
 import unittest
 from parameterized import parameterized, parameterized_class
 import utils
+from typing import (
+    Mapping,
+    Sequence,
+    Any,
+    Dict,
+    Callable,
+)
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -17,7 +24,8 @@ class TestAccessNestedMap(unittest.TestCase):
         ("depth_2_1", {"a": {"b": 2}}, ("a",), {'b': 2}),
         ("depth_2_2", {"a": {"b": 2}}, ("a", "b"), 2),
     ])
-    def test_access_nested_map(self, _, map, path, expected):
+    def test_access_nested_map(self, _: str, map: Mapping,
+                               path: Sequence, expected: Any) -> None:
         """test the Mapping depth from path"""
         self.assertEqual(utils.access_nested_map(map, path), expected)
 
