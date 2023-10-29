@@ -49,13 +49,9 @@ class TestGetJson(unittest.TestCase):
     def test_get_json(self, url, expected):
         """create mock for utils.get_json() """
         with mock.patch("utils.requests.get") as mock_get:
-            mock_response = mock.MagicMock()
-            mock_response.json.return_value = expected
-            mock_get.return_value = mock_response
-
-            result = utils.get_json(url)
+            mock_get.return_value.json.return_value = expected
+            self.assertEqual(utils.get_json(url), expected)
             mock_get.assert_called_with(url)
-            self.assertEqual(result, expected)
 
 
 if __name__ == '__main__':
