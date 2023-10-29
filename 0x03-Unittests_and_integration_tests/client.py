@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """A github org client
 """
+import requests
 from typing import (
     List,
     Dict,
@@ -56,3 +57,8 @@ class GithubOrgClient:
         except KeyError:
             return False
         return has_license
+
+# new_org = GithubOrgClient("holberton")
+# print(new_org.org["repos_url"])
+# print(new_org.public_repos(None))
+# print(requests.get("https://api.github.com/orgs/holberton/repos").json())
