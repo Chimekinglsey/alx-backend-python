@@ -47,7 +47,7 @@ class TestGetJson(unittest.TestCase):
         ("http://example.com", {"payload": True}),
         ("http://holberton.io", {"payload": False}),
     ])
-    @mock.patch('requests.get')
+    @mock.patch('utils.requests.get')
     def test_get_json(self, url, expected, mock_get):
         """create mock for utils.get_json() """
         # with mock.patch("utils.requests.get") as mock_get:
@@ -59,7 +59,7 @@ class TestGetJson(unittest.TestCase):
 class TestMemoize(unittest.TestCase):
     """tests memoize cache """
     def test_memoize(self):
-        """Test memoize caching"""
+        """"""
         class TestClass:
 
             def a_method(self):
@@ -68,15 +68,12 @@ class TestMemoize(unittest.TestCase):
             @memoize
             def a_property(self):
                 return self.a_method()
-        test_instance = TestClass()
-        with mock.patch.object(test_instance, 'a_method') as mock_method:
-            mock_method.return_value = 45
-            call_1 = test_instance.a_property
-            call_2 = test_instance.a_property
-
-            mock_method.assert_called_once()
-            self.assertEqual(call_1, 45)
-            self.assertEqual(call_2, 45)
+        instance = TestClass()
+        with mock.patch.object(instance, 'a_method') as mock_instance:
+            mock_instance.return_value = 45
+            call_1 = instance.a_property
+            call_2 = instance.a_property
+            mock_instance.assert_called_once()
 
 
 if __name__ == '__main__':

@@ -2,6 +2,7 @@ from time import perf_counter
 from functools import wraps
 from typing import Callable
 
+
 def memoize(fn: Callable) -> Callable:
     """Decorator to memoize a method."""
     attr_name = "_{}".format(fn.__name__)
@@ -29,7 +30,6 @@ print(my_object2.expensive_method)
 done = perf_counter()
 print(done-start)
 start = perf_counter()
-print(my_object2.expensive_method)  # Returns the cached result, no recomputation
 print(my_object2._expensive_method)
 done = perf_counter()
 print(done - start)
