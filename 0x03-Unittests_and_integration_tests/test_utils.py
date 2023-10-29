@@ -59,7 +59,7 @@ class TestGetJson(unittest.TestCase):
 class TestMemoize(unittest.TestCase):
     """tests memoize cache """
     def test_memoize(self):
-        """"""
+        """test for memoize"""
         class TestClass:
 
             def a_method(self):
@@ -69,6 +69,7 @@ class TestMemoize(unittest.TestCase):
             def a_property(self):
                 return self.a_method()
         instance = TestClass()
+        
         with mock.patch.object(instance, 'a_method') as mock_instance:
             mock_instance.return_value = 45
             call_1 = instance.a_property
