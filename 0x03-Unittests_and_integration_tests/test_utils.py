@@ -4,6 +4,7 @@ This module contains unit tests for the
     access_nested_map function in the utils module.
 """
 import unittest
+from unittest import mock
 from parameterized import parameterized, parameterized_class
 import utils
 from typing import (
@@ -36,6 +37,25 @@ class TestAccessNestedMap(unittest.TestCase):
                                          expected: KeyError) -> None:
         """ Test the access_nested_map function """
         self.assertRaises(expected, utils.access_nested_map, map, path)
+
+
+class TestGetJson(unittest.TestCase):
+    """Test utils.get_json() mock object """
+
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False}),
+    ])
+    def test_get_json(self, url, expected):
+        """create mock for utils.get_json() """
+        with mock.patch("utils.requests.get") as mock_get:
+            mock_response = mock.MagicMock()
+            mock_response.json.return_value = expected
+            mock_get.return_value = mock_response
+
+            result = utils.get_json(url)
+            mock_get.assert_called_with(url)
+            self.assertEqual(result, expected)
 
 
 if __name__ == '__main__':
