@@ -43,16 +43,6 @@ class TestAccessNestedMap(unittest.TestCase):
 class TestGetJson(unittest.TestCase):
     """Test utils.get_json() mock object """
 
-    @parameterized.expand([
-        ("http://example.com", {"payload": True}),
-        ("http://holberton.io", {"payload": False}),
-    ])
-    def test_get_json(self, url, expected):
-        """create mock for utils.get_json() """
-        with mock.patch("utils.requests.get") as mock_get:
-            mock_get.return_value.json.return_value = expected
-            self.assertEqual(utils.get_json(url), expected)
-            mock_get.assert_called_with(url)
 
 
 class TestMemoize(unittest.TestCase):

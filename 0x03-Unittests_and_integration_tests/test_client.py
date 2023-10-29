@@ -20,6 +20,7 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_org.return_value = expected
         self.assertEqual(GithubOrgClient.org(), expected)
 
+    
 
 if __name__ == '__main__':
     unittest.main()
