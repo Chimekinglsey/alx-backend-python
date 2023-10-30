@@ -74,6 +74,7 @@ class TestMemoize(unittest.TestCase):
             mock_instance.return_value = 45
             call_1 = instance.a_property
             call_2 = instance.a_property
+
             mock_instance.assert_called_once()
 
 
