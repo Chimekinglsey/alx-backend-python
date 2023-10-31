@@ -29,6 +29,21 @@ class TestGithubOrgClient(unittest.TestCase):
             mock_org.return_value = payload
             self.assertEqual(obj._public_repos_url, 'success')
 
+    @patch.object(GithubOrgClient, 'org')
+    def test_public_repos(self, mock_json):
+        """unit-test for GithubOrgClient.public_repos."""
+        value = {'org': 'google', 'repos_url': ['google.com', 'holberton']}
+        mock_json.return_value = value
+        with patch.object(GithubOrgClient, '_public_repos_url',
+                          new_callable=PropertyMock) as mock_pub:
+            expected = ['google.com', 'holberton']
+            mock_pub.return_value = expected
+            new_org = GithubOrgClient('holberton')
+            self.assertEqual(new_org.org(), value)
+            self.assertEqual(new_org._public_repos_url, expected)
+            mock_pub.assert_called_once()
+            mock_json.assert_called_once()
+
 
 if __name__ == '__main__':
     unittest.main()
