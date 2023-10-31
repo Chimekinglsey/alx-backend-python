@@ -76,7 +76,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """Initiates before class execution"""
-        cls.expected_payloads = {
+        expected_payloads = {
             'https://api.github.com/orgs/google': cls.org_payload,
             'https://api.github.com/orgs/google/repos': cls.repos_payload,
         }
@@ -85,13 +85,24 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             """Retrieves payload if exists in the expected_payloads dict"""
             if url in cls.expected_payloads:
                 return Mock(spec=['json'], json=Mock(
-                    return_value=cls.expected_payloads[url]))
+                    return_value=expected_payloads[url]))
             raise HTTPError
 
         cls.get_mock = patch('requests.get')
         cls.get_patcher = cls.get_mock.start()
         cls.get_patcher.return_value.json.side_effect = fetch_payload
         cls.get_patcher.start()
+
+    def test_public_repos(self) -> None:
+        """Test the public_repos method."""
+        obj = GithubOrgClient('google')
+        self.assertEqual(obj.public_repos(), self.expected_repos)
+
+    def test_public_repos_with_license(self) -> None:
+        """Tests the `public_repos` license."""
+        obj = GithubOrgClient('google')
+        result = obj.public_repos(license="apache-2.0")
+        self.assertEqual(result, self.apache2_repos)
 
     @classmethod
     def tearDownClass(cls) -> None:
