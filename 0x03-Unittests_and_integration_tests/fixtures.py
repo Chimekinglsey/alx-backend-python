@@ -948,3 +948,9 @@ TEST_PAYLOAD = [
     ['dagger', 'kratu', 'traceur-compiler', 'firmata.py'],
   )
 ]
+apache2_repos = list()
+for item in TEST_PAYLOAD[0][1]:
+    if item['license'] and item['license']['url'] is not None:
+      if item['license']['url'] not in apache2_repos:
+        apache2_repos.append(item['license']['url'])
+print(apache2_repos)
