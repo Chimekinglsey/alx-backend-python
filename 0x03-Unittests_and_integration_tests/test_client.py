@@ -39,7 +39,6 @@ class TestGithubOrgClient(unittest.TestCase):
             expected_pub_rep_url = 'http://spacedigit.tech'
             mock_pub.return_value = expected_pub_rep_url
             new_org = GithubOrgClient('holberton')
-            print(new_org.public_repos())
             self.assertEqual(new_org.public_repos(), ['google'])
 
             mock_pub.assert_called_once()
