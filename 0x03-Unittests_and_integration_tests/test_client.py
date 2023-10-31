@@ -74,9 +74,11 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls, payload, value) -> None:
         """Initiates before class execution"""
-        cls.get_patcher = patch.object('request.get', side_effect=lambda payload: value)
+        cls.get_patcher = patch.object('request.get')
+        cls.get_patcher.return_value.json.return_value = \
+            cls.get_patcher.side_effect = lambda payload: value
         cls.get_patcher.start()
-    
+
     @classmethod
     def tearDownClass(cls) -> None:
         """cleans up setup class attributes"""
