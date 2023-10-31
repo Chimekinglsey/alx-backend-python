@@ -49,10 +49,11 @@ class TestGithubOrgClient(unittest.TestCase):
         ({"license": {"key": "other_license"}}, "my_license", False),
 
     ])
-    def test_has_license(self, nested_map, path, expected):
+    def test_has_license(self, nested_map, license_key, expected):
         """Unit-test for GithubOrgClient.has_license."""
-        self.assertEqual(
-            GithubOrgClient.has_license(nested_map, path), expected)
+        self.assertEqual(expected,
+                         GithubOrgClient.has_license(nested_map, license_key)
+                         )
 
 
 if __name__ == '__main__':
