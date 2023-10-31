@@ -88,11 +88,9 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
                     return_value=expected_payloads[url]))
             raise HTTPError
 
-        cls.get_mock = patch('requests.get')
-        cls.get_patcher = cls.get_mock.start()
-        cls.get_patcher.return_value.json.side_effect = fetch_payload
+        cls.get_patcher = patch("requests.get", side_effect=fetch_payload)
         cls.get_patcher.start()
-
+       
     def test_public_repos(self) -> None:
         """Test the public_repos method."""
         obj = GithubOrgClient('google')
