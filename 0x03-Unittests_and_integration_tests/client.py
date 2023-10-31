@@ -59,7 +59,7 @@ class GithubOrgClient:
         return has_license
 
 # new_org = GithubOrgClient("holberton")
-# print(new_org.org)
+# print(new_org.has_license())
 # print(new_org._public_repos_url)
 # print(new_org.public_repos(None))
 # print(requests.get("https://api.github.com/orgs/holberton/repos").json())

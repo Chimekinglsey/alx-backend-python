@@ -49,12 +49,14 @@ class TestGithubOrgClient(unittest.TestCase):
         ({"license": {"key": "my_license"}}, "my_license", True),
         ({"license": {"key": "other_license"}}, "my_license", False),
     ])
-    def test_has_license(self, repo: Dict[str, Dict],
-                         license_key: str, expected_result: bool) -> None:
+    @patch.object(GithubOrgClient, 'has_license')
+    def test_has_license(self, repo: Dict[str, Dict], license_key: str,
+                         expected_result: bool, mock_has_lincense) -> None:
         """Unit-test for GithubOrgClient.has_license."""
+        mock_has_lincense.return_value = expected_result
         org = GithubOrgClient('holberton')
         result = org.has_license(repo, license_key)
-        self.assertEqual(result, expected_result)
+        self.assertEqual(expected_result, result)
 
 
 if __name__ == '__main__':
