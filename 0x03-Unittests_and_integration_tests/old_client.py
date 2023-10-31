@@ -3,7 +3,10 @@
 """
 import unittest
 from parameterized import parameterized, parameterized_class
-from unittest.mock import patch, PropertyMock
+from unittest.mock import Mock, patch, PropertyMock
+from fixtures import TEST_PAYLOAD
+
+from requests import HTTPError
 from client import GithubOrgClient
 from typing import Dict
 
@@ -59,26 +62,51 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(expected_result, result)
 
 
-@parameterized_class(
-    ('payload'),
-    [
-    ('org_payload'),
-    ('repos_payload'),
-    ('expected_repos'),
-    ('apache2_repos')
-    ]
-)
+@parameterized_class([
+    {
+        'org_payload': TEST_PAYLOAD[0][0],
+        'repos_payload': TEST_PAYLOAD[0][1],
+        'expected_repos': TEST_PAYLOAD[0][2],
+        'apache2_repos': TEST_PAYLOAD[0][3],
+    },
+])
 class TestIntegrationGithubOrgClient(unittest.TestCase):
-    """Integration Testing"""
+    """Performs integration tests for the `GithubOrgClient` class."""
     @classmethod
     def setUpClass(cls) -> None:
-        """Initiates before class execution"""
-        mock_payload = payload
-        mock_get = patch.object('request.get', return_value = mock_payload)
-    
+        """Sets up class fixtures before running tests."""
+        route_payload = {
+            'https://api.github.com/orgs/google': cls.org_payload,
+            'https://api.github.com/orgs/google/repos': cls.repos_payload,
+        }
+
+        def get_payload(url):
+            """retrieves payload if exists"""
+            if url in route_payload:
+                return Mock(**{'json.return_value': route_payload[url]})
+            return HTTPError
+
+        cls.get_patcher = patch("requests.get", side_effect=get_payload)
+        cls.get_patcher.start()
+
+    def test_public_repos(self) -> None:
+        """Tests the `public_repos` method."""
+        self.assertEqual(
+            GithubOrgClient("google").public_repos(),
+            self.expected_repos
+        )
+
+    def test_public_repos_with_license(self) -> None:
+        """Tests the `public_repos` method with a license."""
+        self.assertEqual(
+            GithubOrgClient("google").public_repos(license="apache-2.0"),
+            self.apache2_repos
+        )
+
     @classmethod
     def tearDownClass(cls) -> None:
-        """cleans up setup class attributes"""
+        """Removes the class fixtures after running all tests."""
+        cls.get_patcher.stop()
 
 
 if __name__ == '__main__':
