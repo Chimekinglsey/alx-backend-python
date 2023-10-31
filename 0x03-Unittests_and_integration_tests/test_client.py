@@ -3,10 +3,12 @@
 """
 import unittest
 from parameterized import parameterized, parameterized_class
-from unittest.mock import patch, PropertyMock
+from unittest.mock import Mock, patch, PropertyMock
+
+from requests import HTTPError
 from client import GithubOrgClient
 from typing import Dict
-from fixtures import TEST_PAYLOAD
+from fixtures import org_payload, repos_payload, expected_repos, apache2_repos
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -63,20 +65,32 @@ class TestGithubOrgClient(unittest.TestCase):
 @parameterized_class(
     ('payload', 'value'),
     [
-        ('org_payload', TEST_PAYLOAD[0][0]),
-        ('repos_payload', TEST_PAYLOAD[0][1]),
-        ('expected_repos', TEST_PAYLOAD[0][2]),
-        ('apache2_repos', TEST_PAYLOAD[0][3]),
+        ('org_payload', org_payload),
+        ('repos_payload', repos_payload),
+        ('expected_repos', expected_repos),
+        ('apache2_repos', apache2_repos),
     ]
 )
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """Integration Testing"""
     @classmethod
-    def setUpClass(cls, payload, value) -> None:
+    def setUpClass(cls) -> None:
         """Initiates before class execution"""
-        cls.get_patcher = patch.object('request.get')
-        cls.get_patcher.return_value.json.return_value = \
-            cls.get_patcher.side_effect = lambda payload: value
+        cls.expected_payloads = {
+            'https://api.github.com/orgs/google': cls.org_payload,
+            'https://api.github.com/orgs/google/repos': cls.repos_payload,
+        }
+
+        def fetch_payload(url):
+            """Retrieves payload if exists in the expected_payloads dict"""
+            if url in cls.expected_payloads:
+                return Mock(spec=['json'], json=Mock(
+                    return_value=cls.expected_payloads[url]))
+            raise HTTPError
+
+        cls.get_mock = patch('requests.get')
+        cls.get_patcher = cls.get_mock.start()
+        cls.get_patcher.return_value.json.side_effect = fetch_payload
         cls.get_patcher.start()
 
     @classmethod
