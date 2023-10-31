@@ -76,18 +76,18 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """Initiates before class execution"""
-        expected_payloads = {
+        route_payload = {
             'https://api.github.com/orgs/google': cls.org_payload,
             'https://api.github.com/orgs/google/repos': cls.repos_payload,
         }
 
-        def fetch_payload(url):
-            """Retrieves payload if exists in the expected_payloads dict"""
-            if url in cls.expected_payloads:
-                return Mock(**{'json.return_value': expected_payloads[url]})
-            raise HTTPError
+        def get_payload(url):
+            """retrieves payload if exists"""
+            if url in route_payload:
+                return Mock(**{'json.return_value': route_payload[url]})
+            return HTTPError
 
-        cls.get_patcher = patch("requests.get", side_effect=fetch_payload)
+        cls.get_patcher = patch("requests.get", side_effect=get_payload)
         cls.get_patcher.start()
        
     def test_public_repos(self) -> None:
