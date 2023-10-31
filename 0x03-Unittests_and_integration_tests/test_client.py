@@ -84,7 +84,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         def fetch_payload(url):
             """Retrieves payload if exists in the expected_payloads dict"""
             if url in cls.expected_payloads:
-                return Mock(**{'json.return_value': fetch_payload[url]})
+                return Mock(**{'json.return_value': expected_payloads[url]})
             raise HTTPError
 
         cls.get_patcher = patch("requests.get", side_effect=fetch_payload)
